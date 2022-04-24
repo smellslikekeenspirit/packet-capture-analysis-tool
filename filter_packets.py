@@ -49,7 +49,4 @@ def filter():
 					packet.append(line)
 
 
-filter()
-
-
 	
