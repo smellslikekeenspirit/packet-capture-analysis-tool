@@ -6,8 +6,7 @@ import pandas as pd
 def parse():
     """
     for every file ending in "filtered.txt", it makes a dataframe containing all relevant information
-    from all packet summary lines in the file and stores the dataframes in a dictionary where the
-    key is the node number
+    from all packet summary lines in the file and stores the dataframes in a dictionary
     :return: dictionary of length 4 where each key, representing a node, contains a dataframe
     """
     print('called parse function in packet_parser.py')
