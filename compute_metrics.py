@@ -4,9 +4,6 @@ import packet_parser
 def compute(nodes):
     print('called compute function in in compute_metrics.py')
 
-    totalRTT = 0
-    totalHop = 0
-
     # list of node IP addresses where index i represents IP of node i+1 (index 0 = IP of node 1)
     node_IPs = ['192.168.100.1', '192.168.100.2', '192.168.200.1', '192.168.200.2']
 
