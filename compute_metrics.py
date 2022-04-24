@@ -4,15 +4,6 @@ import packet_parser
 def compute(nodes):
     print('called compute function in in compute_metrics.py')
 
-    request_sent = 0
-    request_recv = 0
-    replies_sent = 0
-    replies_recv = 0
-    request_bytes_sent = 0
-    request_bytes_recv = 0
-    request_data_sent = 0
-    request_data_recv = 0
-
     totalRTT = 0
     totalHop = 0
 
@@ -23,12 +14,26 @@ def compute(nodes):
         print("Node ", node_number)
         # dataframe for this node
         df = nodes[node_number]
+
+        request_sent = 0
+        request_recv = 0
+        replies_sent = 0
+        replies_recv = 0
+        request_bytes_sent = 0
+        request_bytes_recv = 0
+        request_data_sent = 0
+        request_data_recv = 0
+        request_time_pairs = {}
+        sum_RTTs = 0
+
         for index, data in df.iterrows():
             if data['Source'] == node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'request':
                 request_sent = request_sent + 1
                 request_bytes_sent = request_bytes_sent + int(data['Length'])
                 request_data_sent = request_data_sent + int(data['Length']) - 42
+                # store time when this request was sent for reference when its corresponding reply is found
+                request_time_pairs[data['No.']] = data['Time']
             elif data['Source'] == node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'reply':
                 replies_sent = replies_sent + 1
@@ -40,6 +45,10 @@ def compute(nodes):
             elif data['Source'] != node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'reply':
                 replies_recv = replies_recv + 1
+                # when a reply is found, get its corresponding request and compute round trip time
+                if data['Associated Request/Reply No.'] in request_time_pairs.keys():
+                    RTT = float(data['Time']) - float(request_time_pairs[data['Associated Request/Reply No.']])
+                    sum_RTTs += RTT
             else:
                 pass
 
@@ -51,6 +60,7 @@ def compute(nodes):
         print(request_bytes_recv)
         print(request_data_sent)
         print(request_data_recv)
+        print(round(sum_RTTs/request_sent * 1000, 2))
 
 
 compute(packet_parser.parse())
