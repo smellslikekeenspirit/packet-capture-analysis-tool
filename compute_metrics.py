@@ -27,6 +27,7 @@ def compute(nodes):
         sum_RTTs = 0
 
         for index, data in df.iterrows():
+            # if this node sent a request
             if data['Source'] == node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'request':
                 request_sent = request_sent + 1
@@ -34,14 +35,17 @@ def compute(nodes):
                 request_data_sent = request_data_sent + int(data['Length']) - 42
                 # store time when this request was sent for reference when its corresponding reply is found
                 request_time_pairs[data['No.']] = data['Time']
+            # if this node sent a reply to another node
             elif data['Source'] == node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'reply':
                 replies_sent = replies_sent + 1
+            # if this node received a request from another node
             elif data['Source'] != node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'request':
                 request_recv = request_recv + 1
                 request_bytes_recv = request_bytes_recv + int(data['Length'])
                 request_data_recv = request_data_recv + int(data['Length']) - 42
+            # if this node received a reply to a request it had sent
             elif data['Source'] != node_IPs[node_number-1] and data['Source'] != data['Destination'] \
                     and data['Type (Request/Reply)'] == 'reply':
                 replies_recv = replies_recv + 1
