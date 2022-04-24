@@ -61,7 +61,9 @@ def compute(nodes):
         print(request_bytes_recv)
         print(request_data_sent)
         print(request_data_recv)
-        print(round(sum_RTTs/request_sent * 1000, 2))
+        print(round(sum_RTTs / request_sent * 1000, 2))
+        print(round((request_bytes_sent / sum_RTTs) / 1000, 1))
+        print(round((request_data_sent / sum_RTTs) / 1000, 1))
 
 
 compute(packet_parser.parse())
